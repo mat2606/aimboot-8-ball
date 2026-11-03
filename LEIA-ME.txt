@@ -1,0 +1,73 @@
+MIRA DE BILHAR — PROJETO ANDROID 12 (CÓDIGO-FONTE)
+Versão técnica: 0.1 — protótipo para testes
+
+IMPORTANTE:
+Este ZIP NÃO é um APK compilado. O ambiente de criação não possui Android SDK,
+Gradle e ferramentas de assinatura, por isso não foi possível gerar nem testar um APK.
+O projeto foi preparado para compilação no Android Studio, sem dependências extras.
+Não é possível garantir precisão absoluta, ausência de falhas nem compatibilidade com
+qualquer atualização ou visual do 8 Ball Pool apenas com capturas de referência.
+
+O QUE ESTÁ IMPLEMENTADO
+- Menu de configuração e botão flutuante em português.
+- Android 12 (API 31) como versão mínima.
+- Captura autorizada da tela com MediaProjection, sem root.
+- Sobreposição transparente com permissão de janela flutuante.
+- Detecção automática de bordas e bola branca pela própria imagem.
+- Estimativa da direção pela linha de mira visível no jogo.
+- Projeção geométrica de trajetória e até três reflexões nas bordas.
+- Indicadores opcionais para 3 linhas, contornos de bolas e espessura.
+- Serviço com notificação permanente e opção de encerrar a captura.
+- Processamento local; não exige conexão com a internet nem faz upload de imagens.
+- Limite aproximado de 10 a 12 capturas analisadas por segundo.
+
+COMO COMPILAR O APK NO WINDOWS (ANDROID STUDIO)
+1. Instale o Android Studio oficial: https://developer.android.com/studio
+2. Extraia este ZIP.
+3. No Android Studio, escolha Open / Abrir e selecione a pasta MiraBilharAndroid.
+4. Configure o Gradle 8.7, JDK 17, Android Gradle Plugin 8.6.1 e SDK 35 quando solicitado.
+5. Aguarde a sincronização do projeto.
+6. Vá em Build > Build Bundle(s) / APK(s) > Build APK(s).
+7. O APK de desenvolvimento fica em app/build/outputs/apk/debug/app-debug.apk.
+8. Copie o APK para seu celular Android 12 e permita instalar a fonte desconhecida.
+9. Abra "Mira de Bilhar", autorize sobreposição e confirme a captura de tela.
+10. Abra o jogo em modo paisagem e ajuste os controles pelo botão azul flutuante.
+
+VALIDAÇÃO FEITA NO AMBIENTE DE CRIAÇÃO
+A classe VisionEngine (somente Java) foi compilada e testada com as duas imagens do jogo.
+Resultado nos arquivos fornecidos:
+- Mesa azul: bola branca perto de (527,158) e direção ~162 graus.
+- Mesa cinza: bola branca perto de (351,292) e direção ~356,5 graus.
+Os dois testes automáticos da classe VisionEngine/PathMath passaram.
+Não foi executado nem compilado o aplicativo Android completo — faltam ferramentas
+Android no ambiente. É necessário fazer testes reais no telefone.
+
+LIMITAÇÕES
+- Este não é um "hack" no jogo: não injeta código, não lê memória nem altera o app.
+- As imagens são analisadas por cor e geometria. Temas muito diferentes, animações,
+  oclusão da bola, brilho, transições e banners podem impedir a detecção.
+- A linha do jogo precisa estar visível para inferir o ângulo automaticamente.
+- Projeção matemática ideal: não calcula força real, efeito lateral, atrito, salto,
+  deformação nas colisões, movimentação do pano ou física interna do 8 Ball Pool.
+- Não há calibração MANUAL: a mesa é recalculada automaticamente a cada captura.
+- Alguns celulares podem exigir ajuste de resolução/FPS para bom desempenho.
+- O sistema pode solicitar nova autorização de captura a cada inicialização.
+- A operação em jogos on-line pode não ser aceita pelas regras do serviço.
+
+DETALHES DO CÓDIGO
+app/src/main/java/br/com/mirabilhar/
+    MainActivity.java      tela principal em português
+    AimService.java       captura, notificações, sobreposição e ciclo de vida
+    VisionEngine.java     localização da mesa, bola branca, guia e outras bolas
+    PathMath.java         projeção em linha reta, colisões e reflexões
+    AimOverlayView.java   desenho das guias
+    Prefs.java            preferências locais
+
+teste/TesteDeteccao.java contém verificações usando imagens de referência.
+
+PRIVACIDADE E PERMISSÕES
+ANDROID.PERMISSION.SYSTEM_ALERT_WINDOW: desenhos acima do jogo.
+MEDIAPROJECTION: tela capturada apenas após diálogo do próprio Android.
+FOREGROUND_SERVICE: execução visível na notificação.
+FOREGROUND_SERVICE_MEDIA_PROJECTION: declaração de tipo compatível com SDK novo.
+NÃO usa Acessibilidade, root, internet, autenticação nem permissão para arquivos.
